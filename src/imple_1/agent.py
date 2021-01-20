@@ -21,6 +21,7 @@ class Agent(object):
         for bit in self.geno_pwd:
             if random.random() < self.mu:
                 bit = (bit+1)%2
+                break
         
     def phenotype(self) -> str:
         """Convertie le génotype en phénotype
@@ -41,5 +42,5 @@ class Agent(object):
 
     def clone(self):
         clone = Agent(self.mu,len(self.geno_pwd),True)
-        clone.geno_pwd = self.geno_pwd
+        clone.geno_pwd = self.geno_pwd.copy()
         return clone

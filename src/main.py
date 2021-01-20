@@ -12,8 +12,6 @@ STUDENT_ID = 11914433
 def loadParameters() -> DataFrame:
     param = pandas.read_csv("properties.csv",sep=",").loc[0]
     return param
-    
-
 
 def check(student_id:int, passwords:list) -> list: 
     proc = subprocess.Popen(["./unlock64.exe", str(student_id)] \

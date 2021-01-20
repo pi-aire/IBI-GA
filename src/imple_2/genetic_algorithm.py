@@ -108,9 +108,13 @@ class Genetic_algorithm(object):
         self.fitness_v, isfind = self.evaluation()  # fitness trillé
         proba = self.ranking_expo(self.fitness_v)  # classement des agents
         
+        index = [*self.fitness_v.keys()][0]
+        pwd = self.agents[index].phenotype()
+        print(f"generation: {self.gen}, mdp: {pwd} : {len(pwd)} , score {self.fitness_v[index]}")
+        
         # On s'arrête si on trouve le mot de passe
         if isfind:
-            return True, [*self.fitness_v.keys()][0]
+            return True, self.fitness_v[index]
         
         # Création de la nouvelle génération
         new_gen = []
@@ -123,19 +127,18 @@ class Genetic_algorithm(object):
             child2.mutation()
             new_gen.extend([child1, child2])
         self.agents = new_gen
-        return False, [*self.fitness_v.keys()][0]
+        return False, self.fitness_v[index]
 
     def resolution(self) -> str:
         end = False
         scores = []
         while not end and self.gen <= self.nb_gen:
-            end, index = self.new_generation()
-            pwd = self.agents[index].phenotype()
-            print(f"generation: {self.gen}, mdp: {pwd} : {len(pwd)} , score {self.fitness_v[index]}")
-            scores.append(self.fitness_v[index])
+            end, score = self.new_generation()
+            scores.append(score)
             self.gen += 1
         plt.plot([i for i in range(self.gen)],scores)
         plt.xlabel("Génération")
-        plt.ylabel("Score")
+        plt.ylabel("Fitness")
+        plt.title("Evolution de la fitness max en fonction de la génération")
         plt.suptitle(f"Nb agent: {len(self.agents)}, Nb gen: {self.nb_gen}, Proba c-o: {self.pc}\n Taux de mutation: {self.mu}, C: {self.c}")
         plt.show()

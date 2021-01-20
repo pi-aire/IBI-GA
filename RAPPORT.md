@@ -87,3 +87,15 @@ Après
 * faire une mutation qui enlève ou supprime un caractère
 * Au pire : Après avoir atteind 0.90, on selectionne le mdp qui atteind 0.90, on peut faire du brut force
 
+Implementation 1:
+500,1500,0.1,0.4,0.99,5
+
+Implementation 
+good param 500,1500,0.1,0.1,0.98,5
+Implementation 2:
+good param 500,1500,0.1,0.2,0.98,5
+
+Implementaion 3:
+500,1500,0.1,0.4,0.98,5s
+
+Pour le numéo étudiant 11914433,  le mdp est XDLEV31N4RD32

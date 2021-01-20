@@ -49,6 +49,8 @@ class Genetic_algorithm(object):
         fitness = dict()
         isfind = False           
         list = self.fitness([agent.phenotype() for agent in self.agents])
+        # plt.plot([i for i in range(len(list))],list)
+        # plt.show()  
         # On convertie en dictionnaire
         for i in range(len(list)):
             fitness[i]= list[i] 
@@ -65,7 +67,8 @@ class Genetic_algorithm(object):
         for i in fitness:
             rank[i] = (2/(size*(size-1)))*(r-1)
             r -= 1
-            
+        # plt.plot([i for i in range(size)],rank)
+        # plt.show()    
         return rank
     
     def ranking_expo(self, fitness: dict):
@@ -109,8 +112,11 @@ class Genetic_algorithm(object):
         proba = self.ranking_expo(self.fitness_v)  # classement des agents
         
         # On s'arrête si on trouve le mot de passe
+        index = [*self.fitness_v.keys()][0]
         if isfind:
-            return True, [*self.fitness_v.keys()][0]
+            return True, self.fitness_v[index]
+        pwd = self.agents[index].phenotype()
+        print(f"generation: {self.gen}, mdp: {pwd} : {len(pwd)} , score {self.fitness_v[index]}")  
         
         # Création de la nouvelle génération
         new_gen = []
@@ -123,19 +129,19 @@ class Genetic_algorithm(object):
             child2.mutation()
             new_gen.extend([child1, child2])
         self.agents = new_gen
-        return False, [*self.fitness_v.keys()][0]
+        return False, self.fitness_v[index]
 
     def resolution(self) -> str:
         end = False
         scores = []
         while not end and self.gen <= self.nb_gen:
-            end, index = self.new_generation()
-            pwd = self.agents[index].phenotype()
-            print(f"generation: {self.gen}, mdp: {pwd} : {len(pwd)} , score {self.fitness_v[index]}")
-            scores.append(self.fitness_v[index])
             self.gen += 1
+            end, score = self.new_generation()
+            scores.append(score)   
+            
         plt.plot([i for i in range(self.gen)],scores)
         plt.xlabel("Génération")
-        plt.ylabel("Score")
+        plt.ylabel("Fitness")
+        plt.title("Evolution de la fitness max en fonction de la génération")
         plt.suptitle(f"Nb agent: {len(self.agents)}, Nb gen: {self.nb_gen}, Proba c-o: {self.pc}\n Taux de mutation: {self.mu}, C: {self.c}")
         plt.show()
