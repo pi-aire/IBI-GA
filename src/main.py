@@ -3,7 +3,7 @@
 import subprocess
 import pandas
 # import genetic_algorithm as ga # implemenation 1
-import imple_3.genetic_algorithm as ga
+import imple_2.genetic_algorithm as ga
 
 from pandas.core.frame import DataFrame
 

@@ -19,11 +19,12 @@ Un individu correspond donc à une tentative de mdp, son phénotype étant une c
 
 ## Codage du génotype
 Comme génotype pour la première implémentation, j'ai choisi d'utiliser la conversion des caractères en nombres binaires. Il y a 36 caractères ([A-Z0-9]) à représenter plus une caractère vide, car le nombre de caractère composant le mot de passe entre 12 et 18 caractères. On encode donc les caractères avec 6 bits. Pour la conversion en phénotype, on utilisera donc une table d'équivalence.
+
 Pour la seconde implémentation le génotype sont les caractères pouvant composer le mot de passe c'est à dire les lettre de A à Z, de 0 à 9 et le caractère vide car la taille du mot de passe peut être changeant. Il n'y a donc pas de conversion à faire entre le phénotype et le génotype.
 
 ## La sélection (et la présence ou non d'élitisme)
 La sélection est une sélection linéaire par le rang, sans élitisme
-La sélection est une sélection exponentiel par le rang en faisant varier C on peut avoir une seélection plus ou moin éllitiste
+La sélection est une sélection exponentiel par le rang en faisant varier C on peut avoir une sélection plus ou moin éllitiste
 
 ## Les mutations
 Pour la première implémentation, une mutation fait passer changer la valeur d'un bit de 0 à 1 ou de 1 à 0.
