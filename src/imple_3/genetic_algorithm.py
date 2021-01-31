@@ -116,10 +116,10 @@ class Genetic_algorithm(object):
         
         # On s'arrête si on trouve le mot de passe
         index = [*self.fitness_v.keys()][0]
-        if isfind:
-            return True, self.fitness_v[index]
         pwd = self.agents[index].phenotype()
         print(f"generation: {self.gen}, mdp: {pwd} : {len(pwd)} , score {self.fitness_v[index]}")  
+        if isfind: 
+            return True, self.fitness_v[index]
         
         # Création de la nouvelle génération
         new_gen = []
@@ -134,7 +134,7 @@ class Genetic_algorithm(object):
         self.agents = new_gen
         return False, self.fitness_v[index]
         
-    def resolution(self) -> str:
+    def resolution(self,mode_state=False) -> str:
         end = False
         scores = []
         while not end and self.gen <= self.nb_gen:
@@ -152,13 +152,15 @@ class Genetic_algorithm(object):
             if self.same_last == 25:
                 self.create_agent(len(self.agents))
                 self.same_last = 0
-        f = plt.figure() 
-        f.set_figwidth(10) 
-        f.set_figheight(6)    
-        plt.plot([i for i in range(self.gen)],scores)
-        plt.xlabel("Génération")
-        plt.ylabel("Fitness")
-        plt.title("Evolution de la fitness max en fonction de la génération")
-        plt.suptitle(f"Nb agent: {len(self.agents)}, Nb gen: {self.gen}, Proba c-o: {self.pc}\n Taux de mutation: {self.mu}, C: {self.c}")
         last = scores.pop()
-        plt.savefig(f"../img/impl3_{self.gen}_{last}.png")
+        if not mode_state:
+            f = plt.figure() 
+            f.set_figwidth(10) 
+            f.set_figheight(6)    
+            plt.plot([i for i in range(self.gen)],scores)
+            plt.xlabel("Génération")
+            plt.ylabel("Fitness")
+            plt.title("Evolution de la fitness max en fonction de la génération")
+            plt.suptitle(f"Nb agent: {len(self.agents)}, Nb gen: {self.gen}, Proba c-o: {self.pc}\n Taux de mutation: {self.mu}, C: {self.c}")
+            plt.savefig(f"../img/impl3_{self.gen}_{last}.png")
+        return last==1.0,self.gen

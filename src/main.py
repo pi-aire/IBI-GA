@@ -30,7 +30,7 @@ def check(student_id:int, passwords:list) -> list:
     return results
 
 if __name__ == "__main__":
-    print(check(STUDENT_ID, ["PASSWORD", "ALGOGEN"]))
+    # print(check(STUDENT_ID, ["PASSWORD", "ALGOGEN"]))
     g_a = NaN
     if len(sys.argv) > 1:
         if sys.argv[1] == "1":
