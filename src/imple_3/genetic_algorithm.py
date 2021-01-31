@@ -32,23 +32,29 @@ class Genetic_algorithm(object):
 
 
     def create_agent(self, nb_agent: int) -> None:
+        """Création des individus de la génération de départ"""
         self.agents = []
         for _ in range(nb_agent):
             self.agents.append(
                 a.Agent(self.mu, self.length_mdp))
 
     def fitness(self,phenotypes) -> float:
-            sum = [0.0 for _ in range(len(self.agents))]
-            self.total_call += self.nb_call
-            for c in range(self.nb_call):
-                result = self.fit_func(self.student_id,phenotypes)
-                for i in range(len(self.agents)):
-                   sum[i] += result[i]
-                   if c == (self.nb_call-1):
-                       sum[i] /= self.nb_call
-            return sum
+        """Cacul la fitness des phénotypes fournie en paramètre"""
+        sum = [0.0 for _ in range(len(self.agents))]
+        self.total_call += self.nb_call
+        for c in range(self.nb_call):
+            result = self.fit_func(self.student_id,phenotypes)
+            for i in range(len(self.agents)):
+                sum[i] += result[i]
+                if c == (self.nb_call-1):
+                    sum[i] /= self.nb_call
+        return sum
             
     def evaluation(self) -> dict:
+        """
+        Evaluation des individus présent dans la génération courante
+        et retourne la fitness pour chaque individu
+        """
         fitness = dict()
         isfind = False           
         list = self.fitness([agent.phenotype() for agent in self.agents])
@@ -64,6 +70,7 @@ class Genetic_algorithm(object):
         return fitness, isfind
 
     def ranking_lineaire(self, fitness: dict):
+        """Calcul du rang lineaire"""
         size = len(fitness)
         rank = [0 for i in range(size)]
         r = size
@@ -75,6 +82,7 @@ class Genetic_algorithm(object):
         return rank
     
     def ranking_expo(self, fitness: dict):
+        """Calcul du rang exponentiel"""
         size = len(fitness)
         rank = [0 for i in range(size)]
         r = size
@@ -87,13 +95,13 @@ class Genetic_algorithm(object):
         return rank
 
     def wheel(self, proba):
-        """[summary]
+        """Roux de proba
 
         Args:
-            ranking ([type]): Les proba pour chaque agent
+            ranking ([type]): Les proba pour chaque individu
 
         Returns:
-            int: indice de l'agent choisi aléatoirement
+            int: indice de l'individu choisi aléatoirement
         """
         index = np.random.choice(np.arange(0, len(proba)), p=proba)
         return index
@@ -101,8 +109,8 @@ class Genetic_algorithm(object):
     def cross_over(self, a1: a.Agent, a2: a.Agent):
         """Fait des coupure avec des valeurs de taille d'une lettre
         Args:
-            a1 ([type]): agent 1
-            a2 ([type]): agent 2
+            a1 ([type]): individu 1
+            a2 ([type]): individu 2
         """
         cutpos = random.randint(1, self.length_mdp - 1)
         tmp = a1.geno_pwd[:cutpos]
@@ -110,6 +118,9 @@ class Genetic_algorithm(object):
         a2.geno_pwd[:cutpos] = tmp
 
     def new_generation(self):
+        """
+        Calcul la nouvelle génération
+        """
         # Selection
         self.fitness_v, isfind = self.evaluation()  # fitness trillé
         proba = self.ranking_expo(self.fitness_v)  # classement des agents
@@ -135,6 +146,8 @@ class Genetic_algorithm(object):
         return False, self.fitness_v[index]
         
     def resolution(self,mode_state=False) -> str:
+        """Méthode principal qui cherche le mot de passe
+        et retourne un"""
         end = False
         scores = []
         while not end and self.gen <= self.nb_gen:
@@ -152,7 +165,7 @@ class Genetic_algorithm(object):
             if self.same_last == 25:
                 self.create_agent(len(self.agents))
                 self.same_last = 0
-        last = scores.pop()
+        last = scores[len(scores)-1]
         if not mode_state:
             f = plt.figure() 
             f.set_figwidth(10) 

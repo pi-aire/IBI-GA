@@ -13,3 +13,7 @@ Les commandes d'exécution des différents programmes du projet:
 * Exécuter l'implémentation 3 : `python main.py 3`
 * Exécuter le programme de statistique: `python stat.py`
 * Vérifier le mot de passe trouvé: `.\unlock64.exe 11914433 XDLEV31N4RD32`
+
+Seul le code de l'[implémentation 3](https://github.com/pi-aire/IBI-GA/tree/main/src/imple_3) et le [main](https://github.com/pi-aire/IBI-GA/blob/main/src/main.py) sont commentés.
+
+Le dossier img référence un partie des résultats obtenus avec les différentes implémentations.

@@ -13,10 +13,12 @@ from pandas.core.frame import DataFrame
 STUDENT_ID = 11914433
 
 def loadParameters(row) -> DataFrame:
+    """charge les paramètres pour les AGs"""
     param = pandas.read_csv("properties.csv",sep=",").iloc[row,:]
     return param
 
 def check(student_id:int, passwords:list) -> list: 
+    """Réalise l'appel à unlock64"""
     proc = subprocess.Popen(["./unlock64.exe", str(student_id)] \
         + passwords, stdout=subprocess.PIPE)
     results = []
@@ -30,7 +32,6 @@ def check(student_id:int, passwords:list) -> list:
     return results
 
 if __name__ == "__main__":
-    # print(check(STUDENT_ID, ["PASSWORD", "ALGOGEN"]))
     g_a = NaN
     if len(sys.argv) > 1:
         if sys.argv[1] == "1":
