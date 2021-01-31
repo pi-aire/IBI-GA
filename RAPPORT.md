@@ -15,23 +15,41 @@ header-includes:
 ---
 
 ## Introduction
-Un individu correspond donc à une tentative de mdp, son phénotype étant une chaîne de de 12 à 18 chiffre et lettres majuscules
+Pour résoudre le problème de recherche de mot de passe, j'ai réalisé une 3 implémentations différentes comportant des variante dans la manière de résolution du problème. Chaque partie décrira chaque implémentation en parallèle et la dernière partie analysera les différence entre les différentes implémentations avec leurs hyper-paramètre.
+Un individu correspond à une tentative de mot de passe, son phénotype étant une chaîne de de 12 à 18 chiffre et lettres majuscules
 
 ## Codage du génotype
-Comme génotype pour la première implémentation, j'ai choisi d'utiliser la conversion des caractères en nombres binaires. Il y a 36 caractères ([A-Z0-9]) à représenter plus une caractère vide, car le nombre de caractère composant le mot de passe entre 12 et 18 caractères. On encode donc les caractères avec 6 bits. Pour la conversion en phénotype, on utilisera donc une table d'équivalence.
+Pour génotype de la première implémentation, j'ai choisi d'utiliser un codage des caractères en nombres binaires. Le nombre de caractère à encoder en binaire est de 36 caractères soit les caractères de A à Z, de 0 à 9 et le caractère vide. La présence du caractère vide est justifié pour faire varier le nombre de caractère composant le mot de passe dans notre cas le mot de passe est composé entre 12 et 18 caractères. On encode les caractères avec 6 bits. Pour la conversion en phénotype, on utilisera donc une table d'équivalence.
 
-Pour la seconde implémentation le génotype sont les caractères pouvant composer le mot de passe c'est à dire les lettre de A à Z, de 0 à 9 et le caractère vide car la taille du mot de passe peut être changeant. Il n'y a donc pas de conversion à faire entre le phénotype et le génotype.
+Pour l'implémentation 2, le génotype est un tableau contenant les caractères composant un mot de passe c'est à dire les lettres de A à Z, de 0 à 9 et le caractère vide. Pour passer du génotype au phénotype, on fera une conversion de la liste de caractère en chaine de caractère.
+
+Le génotype de l'implémentation 3 est une variante de celui de l'implémentation 2, on enlève seulement le caractère vide parmi les valeur possible dans le tableau de caractère. Nous verrons par la suite que le nombre de caractère composant un mot de passe variera par mutation.
 
 ## La sélection (et la présence ou non d'élitisme)
-La sélection est une sélection linéaire par le rang, sans élitisme
-La sélection est une sélection exponentiel par le rang en faisant varier C on peut avoir une sélection plus ou moin éllitiste
+Pour les différentes implémentation, il est possible d'exécuter le l'algorithme génétique avec le programme avec une sélection:
+* linéaire par le rang, sans élitisme
+* exponentielle par le rang
+En faisant varier C on peut avoir une sélection plus ou moins élitiste. La variable C fera donc partie des hyper-paramètres des l'algorithme génétique implémentés. Pour les trois implémentations, on utilisera la sélection exponentielle par le rang qui offrira plus de paramétrage.
 
 ## Les mutations
-Pour la première implémentation, une mutation fait passer changer la valeur d'un bit de 0 à 1 ou de 1 à 0.
-La seconde implémentation, une mutation fait changer la valeur d'un caractère en un caractère aléatoire parmi ceux potentiellement présent dans le mot de passe([A-Z0-9 ]).
+Pour la première implémentation, la fonction de mutation change la valeur d'un bit présent dans un génotype aléatoirement de 0 à 1 ou de 1 à 0. Chaque bit à une probabilité $\mu$ de muter et on réalise une seule mutation par génotype.
+
+La seconde implémentation, possède une fonction de mutation qui fait changer la valeur d'un caractère en un caractère aléatoire parmi ceux potentiellement présent dans le mot de passe soit les caractères de A à Z, de 0 à 9 et le caractère vide.
+
+La troisième implémentation possède 7 fonctions différentes de mutation. Pour chaque génotype on réalise une mutation avec une probabilité de $mu$.
+On va maintenant énumérer les différentes mutations et leur probabilité:
+1. Mutation aléatoire (probabilité 2/8): On change la valeur d'un caractère aléatoirement.
+2. Mutation réduction de taille du génotype (probabilité 1/8): On enlève aléatoirement un caractère dans le génotype si le nombre de caractère est supérieur à 12 caractères.
+3. Mutation agrandissement (probabilité 1/8): On ajoute un caractère aléatoire à une position aléatoire.
+4. Mutation échange (probabilité 1/8): Intervertie de place deux caractères aléatoirement présent dans le génotype.
+5. Mutation replace (probabilité 1/8): On retire aléatoirement une élément dans le génotype et on ajoute un caractère à une position aléatoire.
+6. Mutation décalage à droite (probabilité 1/8): On supprime le génome situé à la fin du génotype et on rajoute un caractère aléatoire en première position.
+7. Mutation décalage à gauche (probabilité 1/8): On supprime le génome situé au début du génotype et on rajoute un caractère aléatoire en dernière position.
 
 ## Le cross-over
-Pour la première et la seconde implémentaiton un cross-over se fait par caractère de 1 à N-1 caractères par cross-over.
+Pour la première et la seconde implémentation un cross-over se fait par caractère de 1 à N-1 caractères par cross-over.
+
+Pour l'implémentation 2 et 3, on échange un nombre de caractère aléatoire entre deux parents.
 
 ## Les valeurs des hyper-paramètre (nombre d'individu, taux de mutation, etc.)
 ### Étude de la première implémentation
@@ -95,6 +113,7 @@ Implementation
 good param 500,1500,0.1,0.1,0.98,5
 Implementation 2:
 good param 500,1500,0.1,0.2,0.98,5
+500,1500,0.2,0.2,0.98,5
 
 Implementaion 3:
 500,1500,0.1,0.4,0.98,5s

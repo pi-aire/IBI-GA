@@ -27,9 +27,12 @@ class Genetic_algorithm(object):
         self.nb_call = nb_call
         self.create_agent(nb_agent)
         self.total_call = 0  # nombre de call réalisé par les agents
+        self.last = 0
+        self.same_last = 0 
 
 
     def create_agent(self, nb_agent: int) -> None:
+        self.agents = []
         for _ in range(nb_agent):
             self.agents.append(
                 a.Agent(self.mu, self.length_mdp))
@@ -130,18 +133,32 @@ class Genetic_algorithm(object):
             new_gen.extend([child1, child2])
         self.agents = new_gen
         return False, self.fitness_v[index]
-
+        
     def resolution(self) -> str:
         end = False
         scores = []
         while not end and self.gen <= self.nb_gen:
             self.gen += 1
             end, score = self.new_generation()
-            scores.append(score)   
+            scores.append(score)
             
+            # On regarde si on tombe dans un max local
+            if self.last == score:
+                self.same_last += 1
+            else:
+                self.last = score
+                self.same_last = 0
+            # On reset la génération
+            if self.same_last == 25:
+                self.create_agent(len(self.agents))
+                self.same_last = 0
+        f = plt.figure() 
+        f.set_figwidth(10) 
+        f.set_figheight(6)    
         plt.plot([i for i in range(self.gen)],scores)
         plt.xlabel("Génération")
         plt.ylabel("Fitness")
         plt.title("Evolution de la fitness max en fonction de la génération")
-        plt.suptitle(f"Nb agent: {len(self.agents)}, Nb gen: {self.nb_gen}, Proba c-o: {self.pc}\n Taux de mutation: {self.mu}, C: {self.c}")
-        plt.show()
+        plt.suptitle(f"Nb agent: {len(self.agents)}, Nb gen: {self.gen}, Proba c-o: {self.pc}\n Taux de mutation: {self.mu}, C: {self.c}")
+        last = scores.pop()
+        plt.savefig(f"../img/impl3_{self.gen}_{last}.png")

@@ -18,10 +18,13 @@ class Agent(object):
         self.mutations = [
             self.mutation_down,
             self.mutation_random,
-            self.mutation_random,
+            # self.mutation_random,
             self.mutation_random,
             self.mutation_switch,
-            self.mutation_up
+            self.mutation_up,
+            self.mutation_insert,
+            self.mutation_shift_r,
+            self.mutation_shift_l
         ]
 
     def create_gpwd(self, lenght: int) -> str:
@@ -53,7 +56,19 @@ class Agent(object):
 
     def mutation_up(self) -> None:
         if len(self.geno_pwd) < 18:
-            self.geno_pwd.append(TABLE[random.randint(0, len(TABLE)-1)])
+            self.geno_pwd.insert(random.randint(0,len(self.geno_pwd)-1),TABLE[random.randint(0, len(TABLE)-1)])
+
+    def mutation_shift_r(self) -> None:
+        self.geno_pwd.pop()
+        self.geno_pwd.insert(0,TABLE[random.randint(0, len(TABLE)-1)]) 
+    
+    def mutation_shift_l(self) -> None:
+        self.geno_pwd.append(TABLE[random.randint(0, len(TABLE)-1)])
+        del self.geno_pwd[0] 
+    
+    def mutation_insert(self) -> None:
+        del self.geno_pwd[random.randint(0,len(self.geno_pwd)-1)]
+        self.geno_pwd.insert(random.randint(0,len(self.geno_pwd)-1),TABLE[random.randint(0, len(TABLE)-1)])
 
     def phenotype(self) -> str:
         """Convertie le génotype en phénotype
